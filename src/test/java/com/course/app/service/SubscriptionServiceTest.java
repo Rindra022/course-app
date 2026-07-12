@@ -20,10 +20,7 @@ class SubscriptionServiceTest {
 
   private final SubscriptionRepository repository = mock(SubscriptionRepository.class);
   private final SubscriptionMapper mapper = mock(SubscriptionMapper.class);
-
-  @SuppressWarnings("unchecked")
   private final EventProducer<SubscriptionCreated> eventProducer = mock(EventProducer.class);
-
   private final SubscriptionService service =
       new SubscriptionService(repository, mapper, eventProducer);
 
