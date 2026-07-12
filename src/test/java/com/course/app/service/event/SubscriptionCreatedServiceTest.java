@@ -11,6 +11,7 @@ import com.course.app.model.Subscription;
 import com.course.app.model.SubscriptionStatus;
 import com.course.app.model.User;
 import com.course.app.service.CourseService;
+import com.course.app.service.TicketService;
 import com.course.app.service.UserService;
 import java.time.Instant;
 import java.util.UUID;
@@ -21,8 +22,9 @@ class SubscriptionCreatedServiceTest {
   private final Mailer mailer = mock(Mailer.class);
   private final UserService userService = mock(UserService.class);
   private final CourseService courseService = mock(CourseService.class);
+  private final TicketService ticketService = mock(TicketService.class);
   private final SubscriptionCreatedService service =
-      new SubscriptionCreatedService(mailer, userService, courseService);
+      new SubscriptionCreatedService(mailer, userService, courseService, ticketService);
 
   @Test
   void accept_should_send_confirmation_email_to_the_subscribed_user() {
@@ -41,6 +43,8 @@ class SubscriptionCreatedServiceTest {
 
     when(userService.getById(userId)).thenReturn(user);
     when(courseService.getById(courseId)).thenReturn(course);
+    when(ticketService.generateAndUploadTicket(any(), any(), any()))
+        .thenReturn("https://bucket.s3.amazonaws.com/tickets/fake.pdf");
 
     service.accept(new SubscriptionCreated(subscription));
 
